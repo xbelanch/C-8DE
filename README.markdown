@@ -7,8 +7,8 @@ Version 0.0.1
 
 
 
-Ubuntu
-------
+GNU/Linux
+---------
 
 <code>
 autoreconf -i && ./configure  && make
