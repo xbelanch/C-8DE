@@ -1,0 +1,14 @@
+yace
+*.o
+stamp*
+configure
+config.status
+*.log
+config.h*
+build-aux
+build-aux/*
+autom4te.cache
+aclocal.m4
+Makefile
+Makefile.in
+.deps

@@ -1,5 +1,5 @@
-YACE (Yet Another Chip8 Emulator)
-=================================
+C-8DE (Chip-8 Didactic Emulator)
+================================
 
 Version 0.0.1
 
@@ -11,7 +11,7 @@ Ubuntu
 ------
 
 <code>
-	autoreconf -i && ./configure  && make
+autoreconf -i && ./configure  && make
 </code>
 
 
@@ -23,8 +23,14 @@ You need X devel utils and SDL and SDL_ttf development libraries it's also neces
 The compile sequence is similar to Ubuntu, except for the configure step:
 
 <code>
-	autoreconf -i && ./configure LDFLAGS=-L/opt/local/lib && make
+autoreconf -i && ./configure LDFLAGS=-L/opt/local/lib && make
 </code>
+
+
+Play !
+------
+
+`./yace` and you will see a nice Maze ;-)
 
 
 

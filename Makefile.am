@@ -1,5 +1,5 @@
 bin_PROGRAMS = yace
-chip8_SOURCES = yace.c chip8.c yace.c yace.h memory.c opcodes.c debug.c video.c keyboard.c timer.c
+yace_SOURCES = chip8.c yace.c yace.h opcodes.c debug.c video.c keyboard.c timer.c
 
 AM_CFLAGS = -Wall
 AM_CPPFLAGS = $(SDL_CFLAGS)
