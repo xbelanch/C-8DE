@@ -29,7 +29,9 @@ void start_emulation(){
 	//Reset Chip-8
 	reset_chip8();
 	//Open the more simplistic game for Chip-8
-	load_game("games/MAZE");
+	//load_game("games/MAZE");
+	load_game("games/INVADERS");
+	
 	//Dump the whole weird Memory to stdout
 	memory_dump(CHIP8.memory);
 	//Switch on the TV ;-)

@@ -68,6 +68,7 @@ TTF_Font *bcode;
 #define END_PROGRAM			0x5ff
 #define	STACK_ADDRESS		0x0e0	
 #define MEMORY_SIZE 		0xfff
+#define KEYBOARD_SIZE		16
 
 //operations with bytes
 #define addr(opcode)  				((opcode & 0x0fff))
@@ -100,7 +101,9 @@ struct chip8 {
 	// Video buffer
 	uint8_t video_buffer[CHIP8_SCREEN_WIDTH][CHIP8_SCREEN_HEIGHT];
 	// Memory of chip8
-	uint8_t	memory[MEMORY_SIZE];	
+	uint8_t	memory[MEMORY_SIZE];
+	// Keyboard handle
+	uint8_t keystate[KEYBOARD_SIZE]	
 } CHIP8;
 
 
