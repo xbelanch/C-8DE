@@ -26,6 +26,9 @@ void start_emulation(){
 	
 	//By default, debug is on
 	debug_flag = 1;
+	//and paused = 0
+	pause_flag = 0;
+	step_flag = 0;
 	//Reset Chip-8
 	reset_chip8();
 	//Open the more simplistic game for Chip-8
@@ -47,17 +50,30 @@ void start_emulation(){
 	//Enter the loop emulation!
 	frameNumber = 0;
 	for(;;){
-		//executeCPU
-		fetch_opcode();
+		
+		//executeCPU and emulateGraphics
+		//with pause handle
+		if (!pause_flag) {
+			fetch_opcode();
+			display_chip8_videobuffer();
+			//emulateSound
+			//not implemented yet
+			
+			//control steps 
+			if (step_flag){
+				pause_flag = 1;
+				step_flag = 0;
+			}
+
+		}
 		//generateInterrupts: keyboard, vertical retrace,..
 		keyboard_chip8();	
-		//emulateGraphics
-		display_chip8_videobuffer();
-		//emulateSound
-		
 		//timeSincronization
 		time_sync();
 		frameNumber++;
+
+
+
 	}
 	
 }

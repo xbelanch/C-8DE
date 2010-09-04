@@ -83,7 +83,36 @@ TTF_Font *bcode;
 #define rand8()						0 + (int) (255 * (rand() / (RAND_MAX + 1.0)))
 
 
+/*keyboard
+*  chip8.h - CHIP-8/SCHIP Interpreter/Emulator
+*  Copyright 2010 Ramon de Carvalho Valle <ramon@risesecurity.org>
+*/
+typedef enum {
+	CHIP8_KEY_0 = SDLK_x,
+	CHIP8_KEY_1 = SDLK_1,
+	CHIP8_KEY_2 = SDLK_2,
+	CHIP8_KEY_3 = SDLK_3,
+	CHIP8_KEY_4 = SDLK_q,
+	CHIP8_KEY_5 = SDLK_w,
+	CHIP8_KEY_6 = SDLK_e,
+	CHIP8_KEY_7 = SDLK_a,
+	CHIP8_KEY_8 = SDLK_s,
+	CHIP8_KEY_9 = SDLK_d,
+	CHIP8_KEY_a = SDLK_z,
+	CHIP8_KEY_b = SDLK_c,
+	CHIP8_KEY_c = SDLK_4,
+	CHIP8_KEY_d = SDLK_r,
+	CHIP8_KEY_e = SDLK_f,
+	CHIP8_KEY_f = SDLK_v
+} chip8_key_t;
 
+typedef enum {
+	KEYSTATE_RELEASED = 0,
+	KEYSTATE_PRESSED  = 1
+} chip8_keystate_t;
+
+
+chip8_key_t keymap[KEYBOARD_SIZE];
 
 struct chip8 {
 	// index register 
@@ -103,7 +132,7 @@ struct chip8 {
 	// Memory of chip8
 	uint8_t	memory[MEMORY_SIZE];
 	// Keyboard handle
-	uint8_t keystate[KEYBOARD_SIZE]	
+	uint8_t keystate[KEYBOARD_SIZE];
 } CHIP8;
 
 
@@ -131,6 +160,9 @@ void display_about();
 //Timer
 void time_sync();
 
+//Keyboard methods
+void keyboard_chip8();
+void wait_keypress(uint16_t opcode);
 
 
 

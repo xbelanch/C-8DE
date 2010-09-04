@@ -277,7 +277,7 @@ void fetch_opcode(){
 		group of opcodes
 		*/
 		case 0xE:
-			switch (opcode & 0xff) {
+			switch (opcode & 0xff){
 				
 				/*
 				Ex9E - SKP Vx
@@ -286,7 +286,8 @@ void fetch_opcode(){
 				Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.
 				*/
 				case 0x9e:
-				
+					if (CHIP8.keystate[CHIP8.v[nibble3(opcode)]])
+						CHIP8.pc +=2;
 					break;
 				
 				/*
@@ -301,28 +302,21 @@ void fetch_opcode(){
 						CHIP8.pc +=2;
 					break;
 					
+				default:
+					fprintf(stderr, "Invalid instruction: %04x\n", opcode);
+					break;
+				}
+					
+		/*
+		group of opcodes 0xFxxx
+		*/
+		case 0xF:
+			switch (opcode & 0xff){
 				/*
 				Fx07 - LD Vx, DT
 				Set Vx = delay timer value.
 
 				The value of DT is placed into Vx.
-				*/	
-				case 0x07:
-				
-					break;
-				
-				break;
-				
-			}
-
-		/*
-		group of opcodes
-		*/
-		case 0xF:
-			switch (opcode & 0xff){
-				
-				/*
-				
 				*/
 				case 0x7:
 					CHIP8.v[nibble3(opcode)] = CHIP8.dt;
@@ -335,23 +329,24 @@ void fetch_opcode(){
 				All execution stops until a key is pressed, then the value of that key is stored in Vx.
 				
 				*/
-				case 0xa:
+				case 0xa1:
 					//to implement 
 					//wait_keypress(opcode)
+					wait_keypress(opcode);
 					break;
 					
 				/*
 				
 				*/
 				case 0x15:
-					
+					CHIP8.dt = CHIP8.v[nibble3(opcode)];
 					break;
 					
 				/*
 				
 				*/
 				case 0x18:
-				
+					CHIP8.st = CHIP8.v[nibble3(opcode)];
 					break;
 				
 				/*
@@ -361,7 +356,7 @@ void fetch_opcode(){
 				The values of I and Vx are added, and the results are stored in I.
 				*/
 				case 0x1e:
-					CHIP8.i += CHIP8.v[nibble3(opcode)] ;
+					CHIP8.i += CHIP8.v[nibble3(opcode)];
 					break;
 				
 				/*
@@ -420,11 +415,20 @@ void fetch_opcode(){
 					break;
 				
 			}
+			break;
 
 		default:
 			fprintf(stderr, "Fatal Invalid instruction: %04x\n", opcode);
-		break;		
+			break;		
 	}
+	
+	//Verificar el decremento
+	if (CHIP8.dt)
+		CHIP8.dt--;
+
+	if (CHIP8.st)
+		CHIP8.st--;
+		
 	//Program Counter (PC) +2
 	CHIP8.pc +=2;
 }		
