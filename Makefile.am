@@ -1,5 +1,6 @@
-bin_PROGRAMS = yace
-yace_SOURCES = chip8.c yace.c yace.h opcodes.c debug.c video.c keyboard.c timer.c
+bin_PROGRAMS = chip8-emu
+chip8_emu_SOURCES = src/chip8.c src/yace.c src/yace.h\
+src/opcodes.c src/debug.c src/video.c src/keyboard.c src/timer.c
 
 AM_CFLAGS = -Wall
 AM_CPPFLAGS = $(SDL_CFLAGS)

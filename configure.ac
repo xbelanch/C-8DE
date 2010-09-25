@@ -5,7 +5,7 @@ AC_PREREQ([2.65])
 AC_INIT([yace], [0.0], [xbelanch@gmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
-AC_CONFIG_SRCDIR([chip8.c])
+#AC_CONFIG_SRCDIR([chip8.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
