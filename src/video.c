@@ -152,6 +152,7 @@ void clear_videobuffer()
 }
 
 
+
 void display_chip8_videobuffer()
 {
 	int i,j;
@@ -164,8 +165,11 @@ void display_chip8_videobuffer()
 			rect.x = i*PIXEL_W;
 			rect.y = j*PIXEL_H;
 			
-			if(CHIP8.video_buffer[i][j])
+			if(CHIP8.video_buffer[i][j]){
 				SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 0, 255, 0));	
+			} else {
+				SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 155, 55, 100));
+			}
 		}
 	}
 	SDL_UpdateRect(screen, 0, 0, CHIP8_SCREEN_WIDTH*PIXEL_W, CHIP8_SCREEN_HEIGHT*PIXEL_H);
@@ -175,6 +179,7 @@ void display_chip8_videobuffer()
 //Draw pixels onto video buffer of Chip8
 void draw_pixels(uint16_t opcode)
 {
+	uint8_t pixel_value;
 	int i, j, x, y;
 	int line;
 	//register 0xf = 0
@@ -186,24 +191,26 @@ void draw_pixels(uint16_t opcode)
 	y = CHIP8.v[nibble2(opcode)] % CHIP8_SCREEN_HEIGHT;
 
 
-
+	
 	for (j=0; j < nibble1(opcode); j++){
-		line = CHIP8.memory[CHIP8.i+j];
+		line = CHIP8.memory[(CHIP8.i)+j];
 		for (i=0; i < 8; i++){
 			if (line & (0x80 >> i)){
-				if (CHIP8.video_buffer[x+i][y+j] == 1){
+				pixel_value = CHIP8.video_buffer[x+i][y+j];
+				if (pixel_value == 1){
 					CHIP8.v[15] = 1;
 				}
 				//the xor drawing mode!!
-				CHIP8.video_buffer[x+i][y+j] ^= 1;
+				pixel_value ^= 1;
+				CHIP8.video_buffer[x+i][y+j] = pixel_value;
 			} 
 		}
 	}
 
 	CHIP8.i = CHIP8.stack[CHIP8.sp];
 	CHIP8.sp--; 
-	//fprintf(stderr, "drawing because we found opcode 0x%.3X !\n", opcode);
-	
+	//
+	display_chip8_videobuffer();
 }
 
 

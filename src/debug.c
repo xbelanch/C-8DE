@@ -109,6 +109,9 @@ void chip8_debug(){
 	uint16_t opcode;
 	
 	opcode = CHIP8.memory[CHIP8.pc]<<8 | CHIP8.memory[CHIP8.pc+1];
+	
+
+	
 	int i;
 	int j;
 	const char* registers[]={"V[0]","V[1]","V[2]","V[3]","V[4]", "V[5]","V[6]","V[7]","V[8]","V[9]","V[A]","V[B]","V[C]","V[D]","V[E]","V[F]"};

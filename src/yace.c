@@ -43,21 +43,18 @@ void start_emulation(){
 	//Setup fonts
 	init_text_format();
 
-	//Clear the videobuffer
-	clear_videobuffer();
 	
 	//display info
 	//display_about();
 	//Enter the loop emulation!
 	frameNumber = 0;
-	CHIP8.pc -= 2;
 	for(;;){
 		
 		//executeCPU and emulateGraphics
 		//with pause handle
 		if (!pause_flag) {
 			fetch_opcode();
-			display_chip8_videobuffer();
+			//display_chip8_videobuffer();
 			//emulateSound
 			//not implemented yet
 			
