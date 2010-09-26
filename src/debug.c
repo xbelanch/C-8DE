@@ -25,23 +25,31 @@ void opcode_debug(uint16_t opcode, int i, int j){
 	
 	switch(nibble4(opcode)){
 		
-		/*
-		1nnn - JP addr
-		Jump to location nnn.
-		The interpreter sets the program counter to nnn.
-		*/	
 		case 0x1:
 			sprintf(text, "0x%.3X ... JP 0x%.3X            ", opcode, opcode & 0xfff);
 			break;
+
+		case 0x2:
+			sprintf(text, "0x%.3X ... CALL 0x%.3X          ", opcode, opcode & 0xfff);
+			break;
+			
 		case 0x3:
-			sprintf(text, "0x%.3X ... SE v[%i], 0x%.2X     ", opcode, nibble3(opcode), opcode & 0xff);
+			sprintf(text, "0x%.3X ... SE v[%.1X], 0x%.2X     ", opcode, nibble3(opcode), opcode & 0xff);
 			break;
 		case 0x6:
-			sprintf(text, "0x%.3X ... LD v[%i], 0x%.2X     ", opcode, nibble3(opcode), opcode & 0xff);
+			sprintf(text, "0x%.3X ... LD v[%.1X], 0x%.2X     ", opcode, nibble3(opcode), opcode & 0xff);
 			break;
 			
 		case 0x7:
-			sprintf(text, "0x%.3X ... ADD v[%i], 0x%.2X    ", opcode, nibble3(opcode), opcode & 0xff);
+			sprintf(text, "0x%.3X ... ADD v[%.1X], 0x%.2X    ", opcode, nibble3(opcode), opcode & 0xff);
+			break;
+			
+		case 0x8:
+			switch(nibble1(opcode)){
+					case 0x0:
+						sprintf(text, "0x%.3X ... LD v[%.1X], v[%.1X]     ", opcode, nibble3(opcode), nibble2(opcode));
+						break;
+			}//end of switch 0x8
 			break;
 			
 		case 0xA:
@@ -49,18 +57,31 @@ void opcode_debug(uint16_t opcode, int i, int j){
 			break;
 
 		case 0xC:
-			sprintf(text, "0x%.3X ... RND V[%i], 0x%.2X    ", opcode, nibble3(opcode), opcode & 0xff);
+			sprintf(text, "0x%.3X ... RND V[%.1X], 0x%.2X    ", opcode, nibble3(opcode), opcode & 0xff);
 			break;
 		
 		case 0xD:
-			sprintf(text, "0x%.3X ... DRW V[%d], V[%d], %d ", opcode, nibble3(opcode), nibble2(opcode), nibble1(opcode));
+			sprintf(text, "0x%.3X ... DRW V[%1.X], V[%1.X], %d ", opcode, nibble3(opcode), nibble2(opcode), nibble1(opcode));
 			break;
-			
+		
+		case 0xE:
+			switch (opcode & 0xff){
+				
+				case 0xa1:
+					sprintf(text, "0x%.3X ... SKNP V[%.1X]        ", opcode, nibble3(opcode));
+					break;
+			}//end of switch 0xe
+			break;
+		
 		case 0xF:
 			switch (opcode & 0xff){
 				case 0x1e:
-				sprintf(text, "0x%.3X ... ADD I, %d        ", opcode, nibble3(opcode));
-				break;
+					sprintf(text, "0x%.3X ... ADD I, %d                ", opcode, nibble3(opcode));
+					break;
+				
+				case 0x65:
+					sprintf(text, "0x%.3X ... LD V[%.1X], I[0x%.3X]      ", opcode, nibble3(opcode), CHIP8.i, CHIP8.memory[CHIP8.i]);
+					break;
 				
 				
 			} //end of switch 0XF
@@ -101,6 +122,14 @@ void chip8_debug(){
 	sprintf(text, "SP: 0x%.3X", CHIP8.sp);
 	drawString(text, 10, 225, bcode, screen);
 	
+	sprintf(text, "DT: %.1X  ST: %1.X", CHIP8.dt, CHIP8.st);
+	drawString(text, 10, 250, bcode, screen);
+	
+	
+	sprintf(text, "V[F]: %.2X", CHIP8.v[15]);
+	drawString(text, 10, 275, bcode, screen);
+	
+	
 	sprintf(text, "Opcode: 0x%.3X", opcode);
 	drawYellowString(text, 150, 175, bcode, screen);
 	//drawString("Registers", 440, 165,  code, screen);
@@ -109,17 +138,22 @@ void chip8_debug(){
 	//draw opcodes
 	for (i=0; i<7; i++){
 		opcode = CHIP8.memory[CHIP8.pc+(i*2)]<<8 | CHIP8.memory[CHIP8.pc+(i*2)+1];
-		//hack to avoid strange opcodes display :-(
-		if (opcode < 0xda00 || opcode > 0xe000 ) {
-			opcode_debug(opcode, 340, 10 + (i*20));
-		}
+		opcode_debug(opcode, 340, 10 + (i*20));
 	}
 
+	//draw registers
 	for (j=0; j<3; j++){
 		for (i = 0; i<5; i++){
 			sprintf(text, "%s=0x%.2X", registers[i + (j*5)], CHIP8.v[i+(j*5)]);
 			drawString(text, 150 + (j*80), 200 + (i*18), code, screen);
 		}
+	}
+	
+	//draw Stack
+	drawYellowString("STACK", 420, 175, bcode, screen);
+	for (i=0; i<5; i++){
+		sprintf(text, "0x%.3X", CHIP8.stack[i+1]);
+		drawString(text, 420, 200 + (i*18), code, screen);
 	}
 
 	SDL_UpdateRect(screen, 0, 0, 0, 0);

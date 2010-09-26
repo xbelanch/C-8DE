@@ -428,12 +428,13 @@ void fetch_opcode()
 	}
 	
 	//Verificar el decremento
+
 	if (CHIP8.dt)
 		CHIP8.dt--;
 
 	if (CHIP8.st)
 		CHIP8.st--;
-		
+	
 	//Program Counter (PC) +2
 	CHIP8.pc +=2;
 }		

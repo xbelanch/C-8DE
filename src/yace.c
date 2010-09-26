@@ -32,8 +32,9 @@ void start_emulation(){
 	//Reset Chip-8
 	reset_chip8();
 	//Open the more simplistic game for Chip-8
-	load_game("games/MAZE");
-	//load_game("games/INVADERS");
+	//load_game("games/MAZE");
+	load_game("games/INVADERS");
+	//load_game("games/VBRIX");
 	
 	//Dump the whole weird Memory to stdout
 	//memory_dump(CHIP8.memory);
@@ -49,6 +50,7 @@ void start_emulation(){
 	//display_about();
 	//Enter the loop emulation!
 	frameNumber = 0;
+	CHIP8.pc -= 2;
 	for(;;){
 		
 		//executeCPU and emulateGraphics
