@@ -195,7 +195,7 @@ void draw_pixels(uint16_t opcode)
 	for (j=0; j < nibble1(opcode); j++){
 		line = CHIP8.memory[(CHIP8.i)+j];
 		for (i=0; i < 8; i++){
-			if (line & (0x80 >> i)){
+			if ((line & (0x80 >> i)) != 0){
 				pixel_value = CHIP8.video_buffer[x+i][y+j];
 				if (pixel_value == 1){
 					CHIP8.v[15] = 1;

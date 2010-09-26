@@ -207,7 +207,7 @@ void fetch_opcode()
 					CHIP8.v[15] = 0;
 					
 					if (CHIP8.v[nibble2(opcode)] >= CHIP8.v[nibble3(opcode)])
-						CHIP8.v[15] = 1;
+						CHIP8.v[0xf] = 1;
 					
 					CHIP8.v[nibble2(opcode)] -= CHIP8.v[nibble3(opcode)];
 					break;
@@ -221,7 +221,7 @@ void fetch_opcode()
 				case 0xe:
 					CHIP8.v[15] = ((CHIP8.v[nibble3(opcode)] & 0x80) ? 1 : 0);
 					CHIP8.v[nibble3(opcode)] <<= 1;
-					
+					CHIP8.v[nibble3(opcode)] &= 0xff;
 				default:
 					fprintf(stderr, "Invalid instruction: %04x\n", opcode);
 			}
@@ -280,7 +280,7 @@ void fetch_opcode()
 		case 0xE:
 			
 			switch (opcode & 0xff){
-				
+								
 				/*
 				Ex9E - SKP Vx
 				Skip next instruction if key with the value of Vx is pressed.
@@ -340,6 +340,7 @@ void fetch_opcode()
 					wait_keypress(opcode);
 					break;
 					
+					
 				/*
 				
 				*/
@@ -396,7 +397,8 @@ void fetch_opcode()
 					int i;
 					
 					for (i = 0; i <= nibble3(opcode); i++)
-						CHIP8.memory[CHIP8.i+i] = CHIP8.v[i];
+						CHIP8.memory[CHIP8.i] = CHIP8.v[i];
+						CHIP8.i++;
 					break;
 				}
 				
@@ -410,8 +412,8 @@ void fetch_opcode()
 					int i;
 					
 					for (i = 0; i <= nibble3(opcode); i++)
-						CHIP8.v[i] = CHIP8.memory[CHIP8.i+i];
-						
+						CHIP8.v[i] = CHIP8.memory[CHIP8.i];
+						CHIP8.i++;
 					break;
 				}
 				
