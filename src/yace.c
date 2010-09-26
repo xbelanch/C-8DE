@@ -28,15 +28,15 @@ void start_emulation(){
 	debug_flag = 1;
 	//and paused = 0
 	pause_flag = 0;
-	step_flag = 0;
+	step_flag = 1;
 	//Reset Chip-8
 	reset_chip8();
 	//Open the more simplistic game for Chip-8
-	//load_game("games/MAZE");
-	load_game("games/INVADERS");
+	load_game("games/MAZE");
+	//load_game("games/INVADERS");
 	
 	//Dump the whole weird Memory to stdout
-	memory_dump(CHIP8.memory);
+	//memory_dump(CHIP8.memory);
 	//Switch on the TV ;-)
 	video_init();
 	//Setup fonts
@@ -46,7 +46,7 @@ void start_emulation(){
 	clear_videobuffer();
 	
 	//display info
-	display_about();
+	//display_about();
 	//Enter the loop emulation!
 	frameNumber = 0;
 	for(;;){
@@ -64,7 +64,10 @@ void start_emulation(){
 				pause_flag = 1;
 				step_flag = 0;
 			}
-
+			
+			if (debug_flag){
+				chip8_debug();
+			}	
 		}
 		//generateInterrupts: keyboard, vertical retrace,..
 		keyboard_chip8();	

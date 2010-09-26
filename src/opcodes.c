@@ -23,13 +23,14 @@
 //Standard Chip-8 Instructions
 //Technical Reference by Cowgod's
 //http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
-void fetch_opcode(){
+void fetch_opcode()
+{
 	
 	uint16_t opcode;
 	
 	opcode = CHIP8.memory[CHIP8.pc]<<8 | CHIP8.memory[CHIP8.pc+1];
 	
-	switch(nibble4(opcode)) {
+	switch(nibble4(opcode)){
 		case 0x0:
 			switch(opcode & 0xff){
 				/*
@@ -45,10 +46,10 @@ void fetch_opcode(){
 				The interpreter sets the program counter to the address at the top of the stack, then subtracts 1 from the stack pointer.
 				*/
 				case 0xee:
-					if (CHIP8.sp > 0){
+					//if (CHIP8.sp > 0){
 						CHIP8.pc = CHIP8.stack[CHIP8.sp] - 2;
-						CHIP8.sp--;
-					}
+					//	CHIP8.sp--;
+					//}
 					break;
 			}
 			break;
@@ -274,9 +275,10 @@ void fetch_opcode(){
 			break;		
 
 		/*
-		group of opcodes
+		group of opcodes 0xExxx
 		*/
 		case 0xE:
+			
 			switch (opcode & 0xff){
 				
 				/*
@@ -297,28 +299,31 @@ void fetch_opcode(){
 				Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2.
 				
 				*/
-				case 0xa1:
+				case 0xa1: {
 					if (!CHIP8.keystate[CHIP8.v[nibble3(opcode)]])
 						CHIP8.pc +=2;
 					break;
-					
-				default:
-					fprintf(stderr, "Invalid instruction: %04x\n", opcode);
-					break;
 				}
 					
+				default:
+					fprintf(stderr, "Fatal 0xExxx Invalid instruction: %04x\n", opcode);
+					break
+					
+					;
+			}
+			break;		
 		/*
 		group of opcodes 0xFxxx
 		*/
 		case 0xF:
-			switch (opcode & 0xff){
+			switch (opcode & 0xff){				
 				/*
 				Fx07 - LD Vx, DT
 				Set Vx = delay timer value.
 
 				The value of DT is placed into Vx.
 				*/
-				case 0x7:
+				case 0x07:
 					CHIP8.v[nibble3(opcode)] = CHIP8.dt;
 					break;
 				
@@ -329,7 +334,7 @@ void fetch_opcode(){
 				All execution stops until a key is pressed, then the value of that key is stored in Vx.
 				
 				*/
-				case 0xa1:
+				case 0x0a:
 					//to implement 
 					//wait_keypress(opcode)
 					wait_keypress(opcode);
@@ -377,7 +382,7 @@ void fetch_opcode(){
 				*/
 				case 0x33:
 					CHIP8.memory[CHIP8.i] 	= CHIP8.v[nibble3(opcode)] / 100;
-					CHIP8.memory[CHIP8.i+1] = (CHIP8.v[nibble3(opcode)] % 100) / 10;
+					CHIP8.memory[CHIP8.i+1] = (CHIP8.v[nibble3(opcode)] / 10) % 10;
 					CHIP8.memory[CHIP8.i+2] = CHIP8.v[nibble3(opcode)] % 10;
 					break;
 					
@@ -411,7 +416,7 @@ void fetch_opcode(){
 				}
 				
 				default:
-					fprintf(stderr, "Invalid instruction: %04x\n", opcode);
+					fprintf(stderr, "Fatal 0xFxxx Invalid instruction: %04x\n", opcode);
 					break;
 				
 			}

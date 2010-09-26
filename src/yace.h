@@ -61,6 +61,7 @@ TTF_Font *header;
 TTF_Font *text;
 TTF_Font *code;
 TTF_Font *bcode;
+TTF_Font *rcode;
 
 #define START_FIRMWARE		0x000
 #define END_FIRMWARE		0x1ff
@@ -144,11 +145,6 @@ void reset_chip8();
 void load_game(const char* filename);
 void fetch_opcode();
 
-
-//Debug methods
-void memory_dump(uint8_t* memory);
-
-
 //Video Methods
 void video_init();
 void clear_videobuffer();
@@ -156,6 +152,8 @@ void display_chip8_videobuffer();
 void draw_pixels(uint16_t opcode);
 void init_text_format();
 void display_about();
+void drawString(char *text, int x, int y, TTF_Font *font, SDL_Surface *screen);
+void drawYellowString(char *text, int x, int y, TTF_Font *font, SDL_Surface *screen);
 
 //Timer
 void time_sync();
@@ -164,9 +162,9 @@ void time_sync();
 void keyboard_chip8();
 void wait_keypress(uint16_t opcode);
 
-
-
-
+//Debug methods
+void memory_dump(uint8_t* memory);
+void chip8_debug();
 
 
 
