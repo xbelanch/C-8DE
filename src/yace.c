@@ -25,15 +25,15 @@ void start_emulation(){
 
 	
 	//By default, debug is on
-	debug_flag = 1;
+	debug_flag = 0;
 	//and paused = 0
 	pause_flag = 0;
-	step_flag = 1;
+	step_flag = 0;
 	//Reset Chip-8
 	reset_chip8();
 	//Open the more simplistic game for Chip-8
-	load_game("games/MAZE");
-	//load_game("games/INVADERS");
+	//load_game("games/MAZE");
+	load_game("games/INVADERS");
 	
 	//Dump the whole weird Memory to stdout
 	//memory_dump(CHIP8.memory);
