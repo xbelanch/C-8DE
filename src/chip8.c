@@ -44,6 +44,7 @@ uint8_t fonts8x5[]={
 
 
 void reset_chip8(){
+	int i;
 	//Reset the whole machine 
 	memset(&CHIP8, 0, sizeof(CHIP8));
 	
@@ -51,7 +52,18 @@ void reset_chip8(){
 	memcpy(&CHIP8.memory[START_FIRMWARE], fonts8x5, sizeof(fonts8x5));
 	
 	// CHIP-8 programs start at address 0x200 
-	CHIP8.pc = START_PROGRAM; 	
+	CHIP8.pc = START_PROGRAM; 
+	CHIP8.i  = START_PROGRAM;
+	CHIP8.st = 0x0;
+	CHIP8.dt = 0x0;
+	//registers to 0
+	for (i=0; i<=0xf; i++){
+		CHIP8.v[i] = 0x0;
+	}	
+	
+	//Clear the video buffer
+	clear_videobuffer();
+	
 }
 
 void load_game(const char* filename){

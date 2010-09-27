@@ -9,9 +9,10 @@ void time_sync(){
 	ts = SDL_GetTicks();
 	tt = startTime + frameNumber * FPS;
 	fps = ( frameNumber/(float)(SDL_GetTicks() - startTime) )*1000;
-	sprintf(text, "FPS: %.3f", fps);
-	drawString(text, 400, 270, bcode,  screen);
-	
+	if (debug_flag){
+		sprintf(text, "FPS: %.3f", fps);
+		drawString(text, 10, 300, bcode,  screen);
+	}
 	if (ts <= tt){
 		SDL_Delay(tt-ts);
 	} else {

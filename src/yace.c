@@ -34,6 +34,10 @@ void start_emulation(){
 	//Open the more simplistic game for Chip-8
 	//load_game("games/MAZE");
 	load_game("games/INVADERS");
+<<<<<<< HEAD
+=======
+	//load_game("games/VBRIX");
+>>>>>>> 9fff88a772d56de94e051630ea6746fe047f2dd8
 	
 	//Dump the whole weird Memory to stdout
 	//memory_dump(CHIP8.memory);
@@ -42,8 +46,6 @@ void start_emulation(){
 	//Setup fonts
 	init_text_format();
 
-	//Clear the videobuffer
-	clear_videobuffer();
 	
 	//display info
 	//display_about();
@@ -55,7 +57,7 @@ void start_emulation(){
 		//with pause handle
 		if (!pause_flag) {
 			fetch_opcode();
-			display_chip8_videobuffer();
+			//display_chip8_videobuffer();
 			//emulateSound
 			//not implemented yet
 			
