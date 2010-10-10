@@ -49,7 +49,7 @@ void reset_chip8(){
 	memset(&CHIP8, 0, sizeof(CHIP8));
 	
 	// Copy the CHIP-8 4x5 pixels fonts to CHIP-8 memory.
-	memcpy(&CHIP8.memory[START_FIRMWARE], fonts8x5, sizeof(fonts8x5));
+	memcpy(&CHIP8.memory[0x1b0], fonts8x5, sizeof(fonts8x5));
 	
 	// CHIP-8 programs start at address 0x200 
 	CHIP8.pc = START_PROGRAM; 

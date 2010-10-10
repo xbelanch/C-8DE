@@ -30,6 +30,11 @@ void fetch_opcode()
 	
 	opcode = CHIP8.memory[CHIP8.pc]<<8 | CHIP8.memory[CHIP8.pc+1];
 	
+	if (CHIP8.dt > 0) { CHIP8.dt--; return; }
+	
+	CHIP8.pc +=2;
+	
+	
 	switch(nibble4(opcode)){
 		case 0x0:
 			switch(opcode & 0xff){
@@ -46,11 +51,15 @@ void fetch_opcode()
 				The interpreter sets the program counter to the address at the top of the stack, then subtracts 1 from the stack pointer.
 				*/
 				case 0xee:
-					//if (CHIP8.sp > 0){
-						CHIP8.pc = CHIP8.stack[CHIP8.sp] - 2;
-					//	CHIP8.sp--;
-					//}
-					break;
+		            {   
+		                CHIP8.pc = CHIP8.stack[0];
+		                int i=0;
+		                while (i < CHIP8.sp){
+		                    CHIP8.stack[i] = CHIP8.stack[i+1];
+		                    i++;
+		                }   
+		            }   
+		            break;
 			}
 			break;
 		
@@ -60,7 +69,7 @@ void fetch_opcode()
 		The interpreter sets the program counter to nnn.
 		*/	
 		case 0x1:
-			CHIP8.pc = (opcode & 0xfff) - 2;
+			CHIP8.pc = (opcode & 0xfff);
 			break;
 		
 		/*
@@ -69,12 +78,17 @@ void fetch_opcode()
 		The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
 		*/
 		case 0x2:
-			if (CHIP8.sp < 16){
-				CHIP8.sp++;
-				CHIP8.stack[CHIP8.sp] = CHIP8.pc;
-				CHIP8.pc = (opcode & 0xfff) - 2;
-			}
-			
+		    {   
+		        int i = 16; 
+		        while (i > 0){ 
+		            CHIP8.stack[i] = CHIP8.stack[i-1];
+		            i--;
+		        }   
+		        CHIP8.stack[0] = CHIP8.pc;
+		        CHIP8.pc = addr(opcode) ;
+		    }   
+		    break;
+
 			
 		/*
 		3xkk - SE Vx, byte
@@ -396,9 +410,10 @@ void fetch_opcode()
 				case 0x55: {
 					int i;
 					
-					for (i = 0; i <= nibble3(opcode); i++)
+					for (i = 0; i <= nibble3(opcode); i++){
 						CHIP8.memory[CHIP8.i] = CHIP8.v[i];
 						CHIP8.i++;
+					}
 					break;
 				}
 				
@@ -411,9 +426,10 @@ void fetch_opcode()
 				case 0x65: {
 					int i;
 					
-					for (i = 0; i <= nibble3(opcode); i++)
+					for (i = 0; i <= nibble3(opcode); i++){
 						CHIP8.v[i] = CHIP8.memory[CHIP8.i];
 						CHIP8.i++;
+					}
 					break;
 				}
 				
@@ -429,15 +445,6 @@ void fetch_opcode()
 			break;		
 	}
 	
-	//Verificar el decremento
 
-	if (CHIP8.dt)
-		CHIP8.dt--;
-
-	if (CHIP8.st)
-		CHIP8.st--;
-	
-	//Program Counter (PC) +2
-	CHIP8.pc +=2;
 }		
 		
